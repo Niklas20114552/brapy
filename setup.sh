@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-echo -e "Das ist BETA Software.\nJa.\nMehr kommt jetzt auch nicht...\nIch wollts halt nur mal erwähnt haben.\n\nNun kommt aber das Wichtige:\n- Python muss installiert sein.\n- Pip sollte installiert sein.\n- Nur Linux wird unterstützt.\n- Sudo rechte werden für die Installation benötigt.\n"
+echo -e "Das ist BETA Software.\nJa.\nMehr kommt jetzt auch nicht...\nIch wollts halt nur mal erwähnt haben.\n\nNun kommt aber das Wichtige:\n- Python muss installiert sein.\n- Pip sollte installiert sein.\n- WGET muss installiert sein.\n- Nur Linux wird unterstützt.\n- Sudo rechte werden für die Installation benötigt.\n"
 if [[ $1 == "--apt" ]]; then
     echo "Es wird APT-GET zum Installieren verwendet."
     read -p "Drücke eine beliebige Taste zum fortfahren..." -rsn1
@@ -31,10 +31,13 @@ sudo cp -v home.html /usr/local/share/brapy/
 sudo cp -v main.py /usr/local/bin/brapy
 sudo cp -v brapy.desktop /usr/share/applications/
 if ! fc-list | grep -i "Material Icons Outlined">/dev/null || ! fc-list | grep -i "Material Icons">/dev/null; then
-    git clone https://github.com/google/material-design-icons materialicons
-    cd materialicons/font
-    sudo cp MaterialIcons-Regular.ttf /usr/share/fonts
-    sudo cp MaterialIconsOutlined-Regular.otf /usr/share/fonts
+    if which wget >/dev/null; then
+        sudo wget --output-document=/usr/share/fonts/MaterialIcons-Regular.ttf https://github.com/google/material-design-icons/ raw/master/font/MaterialIcons-Regular.ttf
+        sudo wget --output-document=/usr/share/fonts/MaterialIconsOutlined-Regular.otf https://github.com/google/material-design-icons/raw/master/font/MaterialIconsOutlined-Regular.otf
+    else
+        echo "Bitte installiere WGET und führe das Setup dann erneut aus"
+        exit
+    fi
 fi
 echo "Das sollte nun funktioniert haben..."
 exit

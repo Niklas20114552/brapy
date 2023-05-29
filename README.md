@@ -37,3 +37,7 @@ Mann kann schon mit F11 in den Vollbildmodus wechseln, aber auch Webseiten die e
 ### Drucken
 
 Einfach noch überhaupt nicht implimentiert. Kommt aber noch.
+
+### Lokale IP-Adressen aufrufen
+
+Dies ist ein Bug.

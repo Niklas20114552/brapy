@@ -24,7 +24,6 @@ else
 fi
 sudo mkdir -pv /usr/local/share/brapy
 sudo cp -v brapy_logo.png /usr/local/share/brapy/
-sudo cp -v volume_off.png /usr/local/share/brapy/
 sudo cp -v error.html /usr/local/share/brapy/
 sudo cp -v errorfile.html /usr/local/share/brapy/
 sudo cp -v home.html /usr/local/share/brapy/

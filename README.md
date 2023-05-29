@@ -21,3 +21,19 @@ Für Archlinux (und alles was darauf basiert): ```./setup --pacman```
 Für Debian (und Ubuntu und alles was darauf basiert): ```./setup --apt```
 
 Für alles andere: ```./setup --pip```
+
+## Was noch nicht funktioniert
+
+### Rechtsklickmenü
+
+Es wird noch das standard Rechtsklickmenü von PyQt5.QWebEngineView verwendet.
+
+Daher funktionieren Knöpfe wie "Open link in new tab" oder "Save page" noch nicht, da diese Funktion noch nicht implimentiert ist.
+
+### Vollbild
+
+Mann kann schon mit F11 in den Vollbildmodus wechseln, aber auch Webseiten die einen Eigenen Knopf dafür haben (wie z.B. Youtube) funktioniert dies noch nicht.
+
+### Drucken
+
+Einfach noch überhaupt nicht implimentiert. Kommt aber noch.

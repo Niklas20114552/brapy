@@ -32,7 +32,7 @@ sudo cp -v main.py /usr/local/bin/brapy
 sudo cp -v brapy.desktop /usr/share/applications/
 if ! fc-list | grep -i "Material Icons Outlined">/dev/null || ! fc-list | grep -i "Material Icons">/dev/null; then
     if which wget >/dev/null; then
-        sudo wget --output-document=/usr/share/fonts/MaterialIcons-Regular.ttf https://github.com/google/material-design-icons/ raw/master/font/MaterialIcons-Regular.ttf
+        sudo wget --output-document=/usr/share/fonts/MaterialIcons-Regular.ttf https://github.com/google/material-design-icons/raw/master/font/MaterialIcons-Regular.ttf
         sudo wget --output-document=/usr/share/fonts/MaterialIconsOutlined-Regular.otf https://github.com/google/material-design-icons/raw/master/font/MaterialIconsOutlined-Regular.otf
     else
         echo "Bitte installiere WGET und führe das Setup dann erneut aus"

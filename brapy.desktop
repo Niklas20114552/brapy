@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Icon=/usr/local/share/brapy/brapy_logo.png
+Name=Brapy
+Exec=brapy
+Terminal=false
+Hidden=false
+Categories=Network
+Comment=A minimal Python based Web Browser

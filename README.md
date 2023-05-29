@@ -16,11 +16,11 @@ Navigiere in das Verzeichnis:
 
 Nun musst du das Setup im Terminal ausführen:
 
-Für Archlinux (und alles was darauf basiert): ```./setup --pacman```
+Für Archlinux (und alles was darauf basiert): ```./setup.sh --pacman```
 
-Für Debian (und Ubuntu und alles was darauf basiert): ```./setup --apt```
+Für Debian (und Ubuntu und alles was darauf basiert): ```./setup.sh --apt```
 
-Für alles andere: ```./setup --pip```
+Für alles andere: ```./setup.sh --pip```
 
 ## Was noch nicht funktioniert
 

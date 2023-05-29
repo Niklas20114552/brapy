@@ -4,12 +4,12 @@ if [[ $1 == "--apt" ]]; then
     echo "Es wird APT-GET zum Installieren verwendet."
     read -p "Drücke eine beliebige Taste zum fortfahren..." -rsn1
     echo "Und los gehts.."
-    sudo apt-get install python-pyqt5 python3-pyqt5.qtwebengine python3-requests python3-pyqt5-sip
+    sudo apt-get install python-pyqt5 python3-pyqt5.qtwebengine python3-requests python3-pyqt5-sip -y
 elif [[ $1 == "--pacman" ]]; then
     echo "Es wird PACMAN zum Installieren verwendet."
     read -p "Drücke eine beliebige Taste zum fortfahren..." -rsn1
     echo "Und los gehts.."
-    sudo pacman -S --needed python-pyqt5 python-pyqt5-sip python-pyqt5-webengine python-requests
+    sudo pacman -S --needed --noconfirm python-pyqt5 python-pyqt5-sip python-pyqt5-webengine python-requests
 elif [[ $1 == "--pip" ]]; then
     echo "Es wird PIP3 zum Installieren verwendet."
     read -p "Drücke eine beliebige Taste zum fortfahren..." -rsn1

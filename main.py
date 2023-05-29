@@ -152,10 +152,10 @@ class WebBrowser(QMainWindow):
             self.setWindowTitle(title + " - Brapy")
             if is_muted:
                 self.mute_tab_button.setText("")
-                self.tab_widget.setTabText(index, " " + title)
+                self.tab_widget.setTabText(current_tab_index, f" {title}")
             else:
                 self.mute_tab_button.setText("")
-                self.tab_widget.setTabText(index, title)
+                self.tab_widget.setTabText(current_tab_index, title)
 
 
     def toggle_mute_tab(self):

@@ -1,10 +1,10 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 import sys, requests, os, json
 from PyQt5.QtCore import Qt, QUrl, QDir, QStandardPaths, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QHBoxLayout, QVBoxLayout, QWidget, QMessageBox, QPushButton, QTabWidget, QTabBar, QMenu, QAction, QDialog, QLabel, QFileDialog, QProgressBar
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEnginePage
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
-from PyQt5.QtGui import QIcon, QKeySequence, QFont
+from PyQt5.QtGui import QKeySequence, QFont
 
 class DownloadDialog(QDialog):
     def __init__(self, url, file_name, parent=None):
@@ -148,12 +148,14 @@ class WebBrowser(QMainWindow):
 
             # Überprüfen, ob der Tab bereits stumm geschaltet ist
             is_muted = web_view.page().isAudioMuted()
+            title = web_view.page().title()
+            self.setWindowTitle(title + " - Brapy")
             if is_muted:
                 self.mute_tab_button.setText("")
-                self.tab_widget.setTabIcon(current_tab_index, QIcon("volume_off.png"))
+                self.tab_widget.setTabIcon(index, " " + title)
             else:
                 self.mute_tab_button.setText("")
-                self.tab_widget.setTabIcon(current_tab_index, QIcon())
+                self.tab_widget.setTabIcon(index, title)
 
 
     def toggle_mute_tab(self):
@@ -311,10 +313,9 @@ class WebBrowser(QMainWindow):
             title = new_tab_webview.page().title()
             index = self.tab_widget.currentIndex()
             if new_tab_webview.page().isAudioMuted():
-                self.tab_widget.setTabIcon(index, QIcon("volume_off.png"))
+                self.tab_widget.setTabIcon(index, " " + title)
             else:
-                self.tab_widget.setTabIcon(index, QIcon())
-            self.tab_widget.setTabText(index, title)
+                self.tab_widget.setTabIcon(index, title)
             self.setWindowTitle(title + " - Brapy")
 
         def update_address_bar(url):

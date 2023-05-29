@@ -30,5 +30,11 @@ sudo cp -v errorfile.html /usr/local/share/brapy/
 sudo cp -v home.html /usr/local/share/brapy/
 sudo cp -v main.py /usr/local/bin/brapy
 sudo cp -v brapy.desktop /usr/share/applications/
+if ! fc-list | grep -i "Material Icons Outlined">/dev/null || ! fc-list | grep -i "Material Icons">/dev/null; then
+    git clone https://github.com/google/material-design-icons /tmp/materialicons
+    cd /tmp/materialicons/font
+    sudo cp MaterialIcons-Regular.ttf /usr/share/fonts
+    sudo cp MaterialIconsOutlined-Regular.otf /usr/share/fonts
+fi
 echo "Das sollte nun funktioniert haben..."
 exit

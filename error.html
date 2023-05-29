@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fehler :(</title>
+<style>
+div {
+    height: 200px;
+    width: 500px;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -130px;
+    margin-left: -200px;
+    text-align: center
+}
+</style>
+</head>
+<body>
+<div>
+<p id="code" style="font-size: 20pt"></p>
+<p id="error"></p>
+<p>Falls sie etwas suchen wollten, verwenden Sie die Suchleiste oben rechts.</p>
+</div>
+<script>
+var urlParam = function(name, w){
+    w = w || window;
+    var rx = new RegExp('[\&|\?]'+name+'=([^\&\#]+)'),
+        val = w.location.search.match(rx);
+    return !val ? '':val[1];
+}
+var url = urlParam('eurl');
+var code = urlParam('code')
+var message = "Die Adresse " + url + " konnte nicht gefunden werden.";
+var codemessage = "Gibt's doch nicht! [Error " + code + "]"
+document.getElementById('code').innerHTML = codemessage
+document.getElementById('error').innerHTML = message
+</script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fehler :(</title>
+<style>
+div {
+    height: 200px;
+    width: 500px;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -130px;
+    margin-left: -200px;
+    text-align: center
+}
+</style>
+</head>
+<body>
+<div>
+<p style="font-size: 20pt">Gibt's doch nicht!</p>
+<p id="error"></p>
+</div>
+<script>
+var urlParam = function(name, w){
+    w = w || window;
+    var rx = new RegExp('[\&|\?]'+name+'=([^\&\#]+)'),
+        val = w.location.search.match(rx);
+    return !val ? '':val[1];
+}
+var url = urlParam('file');
+var message = "Die Datei " + url + " konnte nicht gefunden werden.\nMehr wissen wir auch nicht.";
+document.getElementById('error').innerHTML = message
+</script>
+
+</body>
+</html>

@@ -152,10 +152,10 @@ class WebBrowser(QMainWindow):
             self.setWindowTitle(title + " - Brapy")
             if is_muted:
                 self.mute_tab_button.setText("")
-                self.tab_widget.setTabIcon(index, " " + title)
+                self.tab_widget.setTabText(index, " " + title)
             else:
                 self.mute_tab_button.setText("")
-                self.tab_widget.setTabIcon(index, title)
+                self.tab_widget.setTabText(index, title)
 
 
     def toggle_mute_tab(self):
@@ -313,9 +313,9 @@ class WebBrowser(QMainWindow):
             title = new_tab_webview.page().title()
             index = self.tab_widget.currentIndex()
             if new_tab_webview.page().isAudioMuted():
-                self.tab_widget.setTabIcon(index, " " + title)
+                self.tab_widget.setTabText(index, " " + title)
             else:
-                self.tab_widget.setTabIcon(index, title)
+                self.tab_widget.setTabText(index, title)
             self.setWindowTitle(title + " - Brapy")
 
         def update_address_bar(url):

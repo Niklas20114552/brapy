@@ -32,12 +32,16 @@ Daher funktionieren Knöpfe wie "Open link in new tab" oder "Save page" noch nic
 
 ### Vollbild
 
-Mann kann schon mit F11 in den Vollbildmodus wechseln, aber auch Webseiten die einen Eigenen Knopf dafür haben (wie z.B. Youtube) funktioniert dies noch nicht.
+Mann kann schon mit F11 in den Vollbildmodus wechseln, aber Webseiten die einen Eigenen Knopf dafür haben (wie z.B. Youtube) funktioniert dies noch nicht.
 
 ### Drucken
 
 Einfach noch überhaupt nicht implimentiert. Kommt aber noch.
 
-### Lokale IP-Adressen aufrufen
+### Webseiten mit Zertifikatfehler aufrufen
 
 Dies ist ein Bug.
+
+### Berechtigungen
+
+Einfach noch überhaupt nicht implimentiert. Kommt aber noch.

@@ -102,6 +102,12 @@ class WebBrowser(QMainWindow):
         fullscreen_action.triggered.connect(self.toggle_fullscreen)
         self.addAction(fullscreen_action)
 
+        shortcut_location = QKeySequence(Qt.CTRL + Qt.Key_L)
+        location_action = QAction("Location", self)
+        location_action.setShortcut(shortcut_location)
+        location_action.triggered.connect(lambda: self.new_tab_address_bar.setFocus())
+        self.addAction(location_action)
+
         self.tab_widget.currentChanged.connect(self.upmutebutton)
 
     def load_tabs(self):
@@ -264,7 +270,7 @@ class WebBrowser(QMainWindow):
                 return f"file:///usr/local/share/brapy/errorfile.html?file={path}"
 
         def load_url():
-            url = new_tab_address_bar.text()
+            url = self.new_tab_address_bar.text()
             if not url.startswith("file://"):
                 if url.startswith("www."):
                     url = f"https://{url}"
@@ -326,8 +332,8 @@ class WebBrowser(QMainWindow):
                 url_text = "Fehler beim Laden der Datei"
             elif url_text == "file:///usr/local/share/brapy/home.html":
                 url_text = ""
-            new_tab_address_bar.setText(url_text)
-            new_tab_address_bar.setCursorPosition(0)  # Cursor auf den Anfang des Texts setzen
+            self.new_tab_address_bar.setText(url_text)
+            self.new_tab_address_bar.setCursorPosition(0)  # Cursor auf den Anfang des Texts setzen
 
         def close_tab(index):
             self.tab_widget.removeTab(index)
@@ -370,7 +376,7 @@ class WebBrowser(QMainWindow):
         self.tab_widget.addTab(new_tab_widget, title)
 
         # Adressleiste zur neuen Registerkarte hinzufügen
-        new_tab_address_bar = QLineEdit()
+        self.new_tab_address_bar = QLineEdit()
         new_tab_search_bar = QLineEdit()
         new_tab_back_button = QPushButton("")
         new_tab_back_button.setFont(QFont('Material Icons Outlined', 12))
@@ -389,15 +395,15 @@ class WebBrowser(QMainWindow):
         new_tab_back_button.clicked.connect(goback)
         new_tab_reload_button.clicked.connect(reload)
         new_tab_forward_button.clicked.connect(goforward)
-        new_tab_address_bar.setPlaceholderText("Hier URL eingeben")
+        self.new_tab_address_bar.setPlaceholderText("Hier URL eingeben")
         new_tab_search_bar.setPlaceholderText("Suchen")
-        new_tab_address_bar.returnPressed.connect(load_url)
+        self.new_tab_address_bar.returnPressed.connect(load_url)
         new_tab_search_bar.returnPressed.connect(search)
         new_tab_address_layout.addWidget(new_tab_back_button)
         new_tab_address_layout.addWidget(new_tab_forward_button)
         new_tab_address_layout.addWidget(new_tab_reload_button)
         new_tab_address_layout.addWidget(new_tab_home_button)
-        new_tab_address_layout.addWidget(new_tab_address_bar)
+        new_tab_address_layout.addWidget(self.new_tab_address_bar)
         new_tab_address_layout.addWidget(new_tab_search_bar)
         new_tab_layout.addLayout(new_tab_address_layout)
 

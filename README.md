@@ -28,11 +28,11 @@ Für alles andere: ```./setup.sh --pip```
 
 Es wird noch das standard Rechtsklickmenü von PyQt5.QWebEngineView verwendet.
 
-Daher funktionieren Knöpfe wie "Open link in new tab" oder "Save page" noch nicht, da diese Funktion noch nicht implimentiert ist.
+Daher funktionieren Knöpfe wie "Open link in new tab" oder "Save page" noch nicht, da diese Funktionen noch nicht implimentiert sind.
 
 ### Vollbild
 
-Mann kann schon mit F11 in den Vollbildmodus wechseln, aber auf Webseiten die einen Eigenen Knopf dafür haben (wie z.B. Youtube) funktioniert dies noch nicht.
+Man kann schon mit F11 in den Vollbildmodus wechseln, aber auf Webseiten die einen Eigenen Knopf dafür haben (wie z.B. Youtube) funktioniert dies noch nicht.
 
 ### Drucken
 

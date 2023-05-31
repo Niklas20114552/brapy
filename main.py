@@ -4,7 +4,20 @@ from PyQt5.QtCore import Qt, QUrl, QDir, QStandardPaths, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QHBoxLayout, QVBoxLayout, QWidget, QMessageBox, QPushButton, QTabWidget, QTabBar, QMenu, QAction, QDialog, QLabel, QFileDialog, QProgressBar
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEnginePage
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
-from PyQt5.QtGui import QKeySequence, QFont
+from PyQt5.QtGui import QKeySequence, QFont, QFocusEvent
+
+class LineEdit(QLineEdit):
+    def __init__(self):
+        super().__init__()
+        self.mousePressEvent = self.on_click
+
+    def focusInEvent(self, event: QFocusEvent) -> None:
+        self.selectAll()
+
+        super().focusInEvent(event)
+
+    def on_click(self, event) -> None:
+        pass
 
 class DownloadDialog(QDialog):
     def __init__(self, url, file_name, parent=None):
@@ -376,7 +389,7 @@ class WebBrowser(QMainWindow):
         self.tab_widget.addTab(new_tab_widget, title)
 
         # Adressleiste zur neuen Registerkarte hinzufügen
-        self.new_tab_address_bar = QLineEdit()
+        self.new_tab_address_bar = LineEdit()
         new_tab_search_bar = QLineEdit()
         new_tab_back_button = QPushButton("")
         new_tab_back_button.setFont(QFont('Material Icons Outlined', 12))

@@ -6,11 +6,13 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEngi
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PyQt5.QtGui import QKeySequence, QFont, QFocusEvent
 
-APP_VERSION: str = "0.01"
+APP_VERSION: str = "0.1.0"
 APP_NAME: str = "Brapy"
 APP_DESCR: str = APP_NAME + " ist ein auf Qt5 (PyQt5) in Python geschriebender Webbrowser."
 
 class LineEdit(QLineEdit):
+    """LineEdit-Klasse die on_click-event und setzen des Fokus-event implementiert."""
+
     def __init__(self):
         super().__init__()
         self.mousePressEvent = self.on_click
@@ -24,6 +26,8 @@ class LineEdit(QLineEdit):
         pass
 
 class DownloadDialog(QDialog):
+    """Dialog-Klasse für das Handling vom Download."""
+
     def __init__(self, url, file_name, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Download")
@@ -59,6 +63,8 @@ class DownloadDialog(QDialog):
             self.path_lineedit.setText(file_path)
 
 class WebBrowser(QMainWindow):
+    """MainWindow-Klasse die den Web-Browser implementiert."""
+
     def __init__(self):
         super().__init__()
 
@@ -462,6 +468,8 @@ class WebBrowser(QMainWindow):
 #         print(message)
 
 def show_console_help_option():
+    """Gebe die verfügbaren Kommandozeilen-Optionen aus."""
+    
     print(APP_NAME + " - " + APP_DESCR)
     print("")
     print("Version: " + APP_NAME + " " + APP_VERSION)
@@ -475,6 +483,8 @@ def show_console_help_option():
     print("")
 
 def read_commandline_args(argv):
+    """Parse die Kommandozeilen-Optionen."""
+
     try:
         # opts, args = getopt.getopt(argv, "hvt", ["help", "version", "trace"])
         opts, args = getopt.getopt(argv, "hv", ["help", "version"])
@@ -498,6 +508,8 @@ def read_commandline_args(argv):
             #     TRACE = True
 
 def main(argv):
+    """Hauptprogramm."""
+
     app = QApplication(sys.argv)
 
     read_commandline_args(argv)

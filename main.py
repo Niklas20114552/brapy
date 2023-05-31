@@ -6,7 +6,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEngi
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PyQt5.QtGui import QKeySequence, QFont, QFocusEvent
 
-APP_VERSION: str = "0.1.0"
+APP_VERSION: str = "0.2.0"
 APP_NAME: str = "Brapy"
 APP_DESCR: str = APP_NAME + " ist ein auf Qt5 (PyQt5) in Python geschriebender Webbrowser."
 
@@ -460,6 +460,8 @@ class WebBrowser(QMainWindow):
         close_tab_action.setShortcut(shortcut_close_tab)
         close_tab_action.triggered.connect(lambda: close_tab(self.tab_widget.indexOf(new_tab_widget)))
         new_tab_webview.addAction(close_tab_action)
+
+        self.new_tab_address_bar.setFocus()
 
 
 # def trace(message: str):

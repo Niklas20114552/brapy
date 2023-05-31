@@ -1,10 +1,14 @@
 #!/usr/bin/python3
-import sys, requests, os, json
+import sys, requests, os, json, getopt
 from PyQt5.QtCore import Qt, QUrl, QDir, QStandardPaths, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QHBoxLayout, QVBoxLayout, QWidget, QMessageBox, QPushButton, QTabWidget, QTabBar, QMenu, QAction, QDialog, QLabel, QFileDialog, QProgressBar
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEnginePage
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PyQt5.QtGui import QKeySequence, QFont, QFocusEvent
+
+APP_VERSION: str = "0.01"
+APP_NAME: str = "Brapy"
+APP_DESCR: str = APP_NAME + " ist ein auf Qt5 (PyQt5) in Python geschriebender Webbrowser."
 
 class LineEdit(QLineEdit):
     def __init__(self):
@@ -60,7 +64,7 @@ class WebBrowser(QMainWindow):
 
         self.downloads = []
 
-        self.setWindowTitle("Brapy")
+        self.setWindowTitle(APP_NAME)
         layout = QVBoxLayout()
 
         # Tableiste erstellen
@@ -104,7 +108,7 @@ class WebBrowser(QMainWindow):
         self.addAction(new_tab_action)
 
         shortcut_close = QKeySequence(Qt.CTRL + Qt.Key_Q)
-        close_action = QAction("Close Brapy", self)
+        close_action = QAction("Close " + APP_NAME, self)
         close_action.setShortcut(shortcut_close)
         close_action.triggered.connect(self.quit)
         self.addAction(close_action)
@@ -168,7 +172,7 @@ class WebBrowser(QMainWindow):
             # Überprüfen, ob der Tab bereits stumm geschaltet ist
             is_muted = web_view.page().isAudioMuted()
             title = web_view.page().title()
-            self.setWindowTitle(title + " - Brapy")
+            self.setWindowTitle(title + " - " + APP_NAME)
             if is_muted:
                 self.mute_tab_button.setText("")
                 self.tab_widget.setTabText(current_tab_index, f" {title}")
@@ -275,6 +279,7 @@ class WebBrowser(QMainWindow):
                     return f"file:///usr/local/share/brapy/error.html?eurl={url_string}&code={e.response.status_code}"
                 else:
                     return f"file:///usr/local/share/brapy/error.html?eurl={url_string}&code=404"
+
         def check_file_existence(url_string):
             path = url_string.removeprefix("file://")
             if os.path.exists(path):
@@ -322,7 +327,6 @@ class WebBrowser(QMainWindow):
         def gohome():
             new_tab_webview.load(QUrl("file:///usr/local/share/brapy/home.html"))
 
-
         def search():
             search_query = new_tab_search_bar.text()
             url = f"https://duckduckgo.com/?q={search_query}"
@@ -335,7 +339,7 @@ class WebBrowser(QMainWindow):
                 self.tab_widget.setTabText(index, " " + title)
             else:
                 self.tab_widget.setTabText(index, title)
-            self.setWindowTitle(title + " - Brapy")
+            self.setWindowTitle(title + " - " + APP_NAME)
 
         def update_address_bar(url):
             url_text = url.toString()
@@ -452,9 +456,57 @@ class WebBrowser(QMainWindow):
         new_tab_webview.addAction(close_tab_action)
 
 
-if __name__ == "__main__":
+# def trace(message: str):
+#     global TRACE
+#     if TRACE:
+#         print(message)
+
+def show_console_help_option():
+    print(APP_NAME + " - " + APP_DESCR)
+    print("")
+    print("Version: " + APP_NAME + " " + APP_VERSION)
+    print("")
+    print("Aufruf: " + APP_NAME + " [OPTIONEN]")
+    print("")
+    print("Optionen:")
+    print("  -h, --help                    Hilfeoptionen anzeigen")
+    print("  -v, --version                 Version der Anwendung anzeigen")
+    # print("  -t, --trace                   Debuginformationen in der Konsole ausgeben")
+    print("")
+
+def read_commandline_args(argv):
+    try:
+        # opts, args = getopt.getopt(argv, "hvt", ["help", "version", "trace"])
+        opts, args = getopt.getopt(argv, "hv", ["help", "version"])
+
+    except getopt.GetoptError as err:
+        print(f"GetoptError: {err}")
+        show_console_help_option()
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            show_console_help_option()
+            sys.exit()
+        else:
+
+            if opt in ("-v", "--version"):
+                print(APP_VERSION)
+                sys.exit()
+            # if opt in ("-t", "--trace"):
+            #     global TRACE
+            #     TRACE = True
+
+def main(argv):
     app = QApplication(sys.argv)
+
+    read_commandline_args(argv)
+
     browser = WebBrowser()
     browser.show()
-    sys.exit(app.exec_())
+
+    return app.exec_()
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
 

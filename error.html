@@ -30,11 +30,11 @@ var urlParam = function(name, w){
     return !val ? '':val[1];
 }
 var url = urlParam('eurl');
-var code = urlParam('code')
+var code = urlParam('code');
 var message = "Die Adresse " + url + " konnte nicht gefunden werden.";
-var codemessage = "Gibt's doch nicht! [Error " + code + "]"
-document.getElementById('code').innerHTML = codemessage
-document.getElementById('error').innerHTML = message
+var codemessage = "Gibt's doch nicht! [Error " + code + "]";
+document.getElementById('code').innerHTML = codemessage;
+document.getElementById('error').innerHTML = message;
 </script>
 
 </body>

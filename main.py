@@ -1,12 +1,13 @@
 #!/usr/bin/python3
-import sys, requests, os, json, getopt
+import sys, requests, os, json, getopt, re, subprocess
 from PyQt5.QtCore import Qt, QUrl, QDir, QStandardPaths, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QHBoxLayout, QVBoxLayout, QWidget, QMessageBox, QPushButton, QTabWidget, QTabBar, QMenu, QAction, QDialog, QLabel, QFileDialog, QProgressBar
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEnginePage
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PyQt5.QtGui import QKeySequence, QFont, QFocusEvent
+from packaging import version
 
-APP_VERSION: str = "0.02"
+APP_VERSION: str = "0.03"
 APP_NAME: str = "Brapy"
 APP_DESCR: str = APP_NAME + " ist ein auf Qt5 (PyQt5) in Python geschriebender Webbrowser."
 
@@ -63,7 +64,21 @@ class WebBrowser(QMainWindow):
         super().__init__()
 
         self.downloads = []
+        text = requests.get("https://raw.githubusercontent.com/Niklas20114552/brapy/main/main.py").text
+        pattern = r'APP_VERSION: str = "(.+?)"'
+        match = re.search(pattern, text)
+        if match:
+            self.lastversion = match.group(1)
+        else:
+            self.lastversion = APP_VERSION
 
+        if self.is_version_greater(self.lastversion, APP_VERSION):
+            self.homeurl = f"file:///usr/local/share/brapy/homeupdate.html?old={APP_VERSION}&new={self.lastversion}"
+            self.updateavailable = True
+        else:
+            self.homeurl = "file:///usr/local/share/brapy/home.html"
+            self.updateavailable = False
+        
         self.setWindowTitle(APP_NAME)
         layout = QVBoxLayout()
 
@@ -75,7 +90,7 @@ class WebBrowser(QMainWindow):
         self.new_tab_button = QPushButton("")
         self.new_tab_button.setFont(QFont('Material Icons Outlined', 12))
         self.new_tab_button.setFixedSize(30, 30)  # Größe des Knopfs anpassen
-        self.new_tab_button.clicked.connect(lambda: self.add_new_tab("file:///usr/local/share/brapy/home.html", "Neuer Tab"))
+        self.new_tab_button.clicked.connect(lambda: self.add_new_tab(self.homeurl, "Neuer Tab"))
 
         self.mute_tab_button = QPushButton("")
         self.mute_tab_button.setFont(QFont('Material Icons', 12))
@@ -104,7 +119,7 @@ class WebBrowser(QMainWindow):
         shortcut_new_tab = QKeySequence(Qt.CTRL + Qt.Key_T)
         new_tab_action = QAction("New Tab", self)
         new_tab_action.setShortcut(shortcut_new_tab)
-        new_tab_action.triggered.connect(lambda: self.add_new_tab("file:///usr/local/share/brapy/home.html", "Neuer Tab"))
+        new_tab_action.triggered.connect(lambda: self.add_new_tab(self.homeurl, "Neuer Tab"))
         self.addAction(new_tab_action)
 
         shortcut_close = QKeySequence(Qt.CTRL + Qt.Key_Q)
@@ -126,6 +141,28 @@ class WebBrowser(QMainWindow):
         self.addAction(location_action)
 
         self.tab_widget.currentChanged.connect(self.upmutebutton)
+    def is_version_greater(self, version1, version2):
+        parts1 = version1.split(".")
+        parts2 = version2.split(".")
+        max_parts = max(len(parts1), len(parts2))
+        for i in range(max_parts):
+            part1 = int(parts1[i]) if i < len(parts1) else 0
+            part2 = int(parts2[i]) if i < len(parts2) else 0
+            if part1 > part2:
+                return True
+            elif part1 < part2:
+                return False
+        return False
+    def upgrade(self):
+        self.save_tabs()
+        print("Save complete!")
+        with open(os.path.expanduser('~/.config/brapy/tabs.json'), 'r') as file:
+            data = json.load(file)
+        data.append({"url": "file:///usr/local/share/brapy/upgrade.html", "title": "Upgrade abgeschlossen"})
+        with open(os.path.expanduser('~/.config/brapy/tabs.json'), 'w') as file:
+            json.dump(data, file)
+        process = subprocess.Popen("pkexec /usr/local/share/brapy/upgrade", shell=True)
+        sys.exit()
 
     def load_tabs(self):
         tabs_file_path = os.path.expanduser("~/.config/brapy/tabs.json")
@@ -135,11 +172,15 @@ class WebBrowser(QMainWindow):
                 tabs_data = json.load(tabs_file)
                 for tab_data in tabs_data:
                     url = tab_data["url"]
+                    if url == "file:///usr/local/share/brapy/home.html" or url.startswith("file:///usr/local/share/brapy/homeupdate.html"):
+                        url = self.homeurl
+                    elif url == "file:///usr/local/share/brapy/upgrade.html":
+                        url = url + "?ver=" + APP_VERSION
                     title = tab_data["title"]
                     self.add_new_tab(url, title)
             os.remove(tabs_file_path)
         else:
-             self.add_new_tab("file:///usr/local/share/brapy/home.html", "Neuer Tab")
+             self.add_new_tab(self.homeurl, "Neuer Tab")
 
     def toggle_fullscreen(self):
         if self.isFullScreen():
@@ -325,7 +366,7 @@ class WebBrowser(QMainWindow):
                 new_tab_webview.load(QUrl(qeurl))
 
         def gohome():
-            new_tab_webview.load(QUrl("file:///usr/local/share/brapy/home.html"))
+            new_tab_webview.load(QUrl(self.homeurl))
 
         def search():
             search_query = new_tab_search_bar.text()
@@ -347,7 +388,7 @@ class WebBrowser(QMainWindow):
                 url_text = "Fehler beim Laden der Webseite"
             elif url_text.startswith("file:///usr/local/share/brapy/errorfile.html"):
                 url_text = "Fehler beim Laden der Datei"
-            elif url_text == "file:///usr/local/share/brapy/home.html":
+            elif url_text == "file:///usr/local/share/brapy/home.html" or url_text.startswith("file:///usr/local/share/brapy/homeupdate.html"):
                 url_text = ""
             self.new_tab_address_bar.setText(url_text)
             self.new_tab_address_bar.setCursorPosition(0)  # Cursor auf den Anfang des Texts setzen
@@ -403,11 +444,14 @@ class WebBrowser(QMainWindow):
         new_tab_reload_button.setFont(QFont('Material Icons Outlined', 12))
         new_tab_home_button = QPushButton("")
         new_tab_home_button.setFont(QFont('Material Icons Outlined', 12))
+        new_tab_upgrade_button = QPushButton(" Update auf " + self.lastversion)
+        new_tab_upgrade_button.setFixedHeight(26)
         new_tab_forward_button.setFixedSize(30, 26)
         new_tab_reload_button.setFixedSize(30, 26)
         new_tab_back_button.setFixedSize(30, 26)
         new_tab_home_button.setFixedSize(30, 26)
         new_tab_search_bar.setFixedWidth(500)
+        new_tab_upgrade_button.clicked.connect(self.upgrade)
         new_tab_home_button.clicked.connect(gohome)
         new_tab_back_button.clicked.connect(goback)
         new_tab_reload_button.clicked.connect(reload)
@@ -422,6 +466,8 @@ class WebBrowser(QMainWindow):
         new_tab_address_layout.addWidget(new_tab_home_button)
         new_tab_address_layout.addWidget(self.new_tab_address_bar)
         new_tab_address_layout.addWidget(new_tab_search_bar)
+        if self.updateavailable:
+            new_tab_address_layout.addWidget(new_tab_upgrade_button)
         new_tab_layout.addLayout(new_tab_address_layout)
 
         # Webview zur neuen Registerkarte hinzufügen
@@ -478,8 +524,7 @@ class WebBrowser(QMainWindow):
         reload2_action.setShortcut(shortcut2_reload)
         reload2_action.triggered.connect(reload)
         new_tab_webview.addAction(reload2_action)
-
-        if url == "file:///usr/local/share/brapy/home.html":
+        if url == "file:///usr/local/share/brapy/home.html" or url.startswith("file:///usr/local/share/brapy/homeupdate.html"):
             self.new_tab_address_bar.setFocus()
 
 # def trace(message: str):

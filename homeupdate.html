@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Willkommen zu Brapy</title>
+<style>
+div {
+    height: 200px;
+    width: 500px;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -130px;
+    margin-left: -200px;
+    text-align: center
+}
+</style>
+</head>
+<body>
+<div>
+<p style="font-size: 20pt">Willkommen zu Brapy</p>
+<p>Fange an zu surfen und gebe etwas in die Leisten ein!</p>
+<br>
+<p id="update-title" style="font-size: 18pt"></p>
+<p id="update-subtitle" style="font-size: 15pt"></p>
+<p>Verwende den Update-Knopf neben der Suchleiste.</p>
+</div>
+<script>
+var urlParam = function(name, w){
+    w = w || window;
+    var rx = new RegExp('[\&|\?]'+name+'=([^\&\#]+)'),
+        val = w.location.search.match(rx);
+    return !val ? '':val[1];
+}
+var oldver = urlParam('old');
+var newver = urlParam('new');
+var updatetitle = "Update auf brapy " + newver + " verfügbar!"
+var updatesubtitle = "Aktuell auf brapy " + oldver
+document.getElementById('update-title').innerHTML = updatetitle;
+document.getElementById('update-subtitle').innerHTML = updatesubtitle;
+</script>
+</body>
+</html>

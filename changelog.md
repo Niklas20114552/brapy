@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.03 : 03.06.2023 - Added Upgrader
+
+By: [@Niklas20114552](https://github.com/Niklas20114552)
+
+Added:
+
+- Upgrader
+- Unattended Mode for setup.sh
+- Missing Semicolons in error.html and errorfile.html
+
+Changed:
+
+- main.py : Every direct link to home.html is replaced by variable self.homeurl
+
 ## 0.02 : 03.06.2023 - Improved Shortcuts and Address bar focus
 
 By: [@Niklas20114552](https://github.com/Niklas20114552)

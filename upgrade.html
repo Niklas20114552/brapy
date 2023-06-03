@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Fehler :(</title>
+<title>Upgrade abgeschlossen</title>
 <style>
 div {
     height: 200px;
@@ -18,8 +18,8 @@ div {
 </head>
 <body>
 <div>
-<p style="font-size: 20pt">Gibt's doch nicht!</p>
-<p id="error"></p>
+<p style="font-size: 20pt">Glückwunsch!</p>
+<p id="upgrade"></p>
 </div>
 <script>
 var urlParam = function(name, w){
@@ -28,9 +28,9 @@ var urlParam = function(name, w){
         val = w.location.search.match(rx);
     return !val ? '':val[1];
 }
-var url = urlParam('file');
-var message = "Die Datei " + url + " konnte nicht gefunden werden.\nMehr wissen wir auch nicht.";
-document.getElementById('error').innerHTML = message;
+var ver = urlParam('ver');
+var message = "Das Upgrade auf brapy " + ver + " wurde erfolgreich abgeschlossen!";
+document.getElementById('upgrade').innerHTML = message;
 </script>
 
 </body>

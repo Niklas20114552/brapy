@@ -15,11 +15,17 @@ elif [[ $1 == "--pip" ]]; then
     read -p "Drücke eine beliebige Taste zum fortfahren..." -rsn1
     echo "Und los gehts.."
     sudo pip3 install pyqt5 requests pyqtwebengine pyqt5-sip
+elif [[ $1 == "--dnf" ]]; then
+    echo "Es wird DNF zum Installieren verwendet."
+    read -p "Drücke eine beliebige Taste zum fortfahren..." -rsn1
+    echo "Und los gehts.."
+    sudo dnf install PyQt5 python3-pyqt5-sip python3-requests python3-qt5-webengine -y
 else
     echo "Bitte gebe deine Installationsart an:"
     echo " --pip     Verwende Pip zum installieren      [Keine Limitierung]"
     echo " --apt     Verwende Apt-get zum installieren  [Nur für Debian   ]"
-    echo " --pacman  Verwende Pacman zum installieren.  [Nur für Archlinux]"
+    echo " --pacman  Verwende Pacman zum installieren   [Nur für Archlinux]"
+    echo " --dnf     Verwende Dnf zum installieren      [Nur für Red Hat  ]"
     exit
 fi
 sudo mkdir -pv /usr/local/share/brapy

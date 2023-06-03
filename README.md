@@ -20,6 +20,8 @@ Für Archlinux (und alles was darauf basiert): ```./setup.sh --pacman```
 
 Für Debian (und Ubuntu und alles was darauf basiert): ```./setup.sh --apt```
 
+Für RedHat (und alles was darauf basiert, wie Fedora): ```./setup.sh --dnf```
+
 Für alles andere: ```./setup.sh --pip```
 
 ## Was noch nicht funktioniert

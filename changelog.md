@@ -1,5 +1,13 @@
 # Changelog
 
+## 03.06.2023 - Added RedHat/DNF Setup Support
+
+By: [@Niklas20114552](https://github.com/Niklas20114552)
+
+Added:
+
+- Support for DNF in setup.sh : --dnf
+
 ## 31.05.2023 - Introducing versioning
 
 By: [@ProfP30](https://github.com/ProfP30)

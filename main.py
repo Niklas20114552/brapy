@@ -6,7 +6,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEngi
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PyQt5.QtGui import QKeySequence, QFont, QFocusEvent
 
-APP_VERSION: str = "0.01"
+APP_VERSION: str = "0.02"
 APP_NAME: str = "Brapy"
 APP_DESCR: str = APP_NAME + " ist ein auf Qt5 (PyQt5) in Python geschriebender Webbrowser."
 
@@ -455,6 +455,32 @@ class WebBrowser(QMainWindow):
         close_tab_action.triggered.connect(lambda: close_tab(self.tab_widget.indexOf(new_tab_widget)))
         new_tab_webview.addAction(close_tab_action)
 
+        shortcut_goback = QKeySequence(Qt.ALT + Qt.Key_Left)
+        goback_action = QAction("Go Back", self)
+        goback_action.setShortcut(shortcut_goback)
+        goback_action.triggered.connect(goback)
+        new_tab_webview.addAction(goback_action)
+
+        shortcut_goforward = QKeySequence(Qt.ALT + Qt.Key_Right)
+        goforward_action = QAction("Go Back", self)
+        goforward_action.setShortcut(shortcut_goforward)
+        goforward_action.triggered.connect(goforward)
+        new_tab_webview.addAction(goforward_action)
+
+        shortcut_reload = QKeySequence(Qt.CTRL + Qt.Key_R)
+        reload_action = QAction("Go Back", self)
+        reload_action.setShortcut(shortcut_reload)
+        reload_action.triggered.connect(reload)
+        new_tab_webview.addAction(reload_action)
+
+        shortcut2_reload = QKeySequence(Qt.Key_F5)
+        reload2_action = QAction("Go Back", self)
+        reload2_action.setShortcut(shortcut2_reload)
+        reload2_action.triggered.connect(reload)
+        new_tab_webview.addAction(reload2_action)
+
+        if url == "file:///usr/local/share/brapy/home.html":
+            self.new_tab_address_bar.setFocus()
 
 # def trace(message: str):
 #     global TRACE
@@ -491,7 +517,7 @@ def read_commandline_args(argv):
         else:
 
             if opt in ("-v", "--version"):
-                print(APP_VERSION)
+                print("brapy " + APP_VERSION)
                 sys.exit()
             # if opt in ("-t", "--trace"):
             #     global TRACE

@@ -6,11 +6,11 @@ By: [@Niklas20114552](https://github.com/Niklas20114552)
 
 Added: 
 
-- Shortcuts:
+- Shortcuts: ([#6](https://github.com/Niklas20114552/brapy/issues/6))
     - Alt + Left Arrow : Go back in navigation history.
     - Alt + Right Arrow : Go forward in navigation history.
     - F5 / CTRL + R : Reload Page
-- Address bar is now focused when opening a new tab
+- Address bar is now focused when opening a new tab ([#4](https://github.com/Niklas20114552/brapy/pull/4))
 
 Changed:
 
@@ -23,7 +23,7 @@ By: [@Niklas20114552](https://github.com/Niklas20114552)
 
 Added:
 
-- Support for DNF in setup.sh : --dnf
+- Support for DNF in setup.sh : --dnf ([#5](https://github.com/Niklas20114552/brapy/issues/5))
 
 ## 0.01 : 31.05.2023 - Introducing versioning
 

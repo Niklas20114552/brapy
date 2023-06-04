@@ -8,7 +8,7 @@ from PyQt5.QtGui import QKeySequence, QFont, QFocusEvent
 from packaging import version
 from shutil import copyfile
 
-APP_VERSION: str = "0.03.1"
+APP_VERSION: str = "0.03.2"
 APP_NAME: str = "Brapy"
 APP_DESCR: str = APP_NAME + " ist ein auf Qt5 (PyQt5) in Python geschriebender Webbrowser."
 
@@ -117,27 +117,23 @@ class WebBrowser(QMainWindow):
         main_widget.setLayout(layout)
         self.setCentralWidget(main_widget)
 
-        shortcut_new_tab = QKeySequence(Qt.CTRL + Qt.Key_T)
         new_tab_action = QAction("New Tab", self)
-        new_tab_action.setShortcut(shortcut_new_tab)
+        new_tab_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_T))
         new_tab_action.triggered.connect(lambda: self.add_new_tab(self.homeurl, "Neuer Tab"))
         self.addAction(new_tab_action)
 
-        shortcut_close = QKeySequence(Qt.CTRL + Qt.Key_Q)
         close_action = QAction("Close " + APP_NAME, self)
-        close_action.setShortcut(shortcut_close)
+        close_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Q))
         close_action.triggered.connect(self.quit)
         self.addAction(close_action)
 
-        shortcut_fullscreen = QKeySequence(Qt.Key_F11)
         fullscreen_action = QAction("Toggle Fullscreen", self)
-        fullscreen_action.setShortcut(shortcut_fullscreen)
+        fullscreen_action.setShortcut(QKeySequence(Qt.Key_F11))
         fullscreen_action.triggered.connect(self.toggle_fullscreen)
         self.addAction(fullscreen_action)
 
-        shortcut_location = QKeySequence(Qt.CTRL + Qt.Key_L)
         location_action = QAction("Location", self)
-        location_action.setShortcut(shortcut_location)
+        location_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_L))
         location_action.triggered.connect(lambda: self.new_tab_address_bar.setFocus())
         self.addAction(location_action)
 
@@ -502,35 +498,36 @@ class WebBrowser(QMainWindow):
         # Knopfgröße für alle Registerkarten anpassen
         tab_bar.setStyleSheet("QTabBar::close-button { width: 20px; height: 20px; margin: 0px; padding: 0px; }")
 
-        shortcut_close_tab = QKeySequence(Qt.CTRL + Qt.Key_W)
         close_tab_action = QAction("Close Tab", self)
-        close_tab_action.setShortcut(shortcut_close_tab)
+        close_tab_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_W))
         close_tab_action.triggered.connect(lambda: close_tab(self.tab_widget.indexOf(new_tab_widget)))
         new_tab_webview.addAction(close_tab_action)
 
-        shortcut_goback = QKeySequence(Qt.ALT + Qt.Key_Left)
         goback_action = QAction("Go Back", self)
-        goback_action.setShortcut(shortcut_goback)
+        goback_action.setShortcut(QKeySequence(Qt.ALT + Qt.Key_Left))
         goback_action.triggered.connect(goback)
         new_tab_webview.addAction(goback_action)
 
-        shortcut_goforward = QKeySequence(Qt.ALT + Qt.Key_Right)
-        goforward_action = QAction("Go Back", self)
-        goforward_action.setShortcut(shortcut_goforward)
+        goforward_action = QAction("Go Forward", self)
+        goforward_action.setShortcut(QKeySequence(Qt.ALT + Qt.Key_Right))
         goforward_action.triggered.connect(goforward)
         new_tab_webview.addAction(goforward_action)
 
-        shortcut_reload = QKeySequence(Qt.CTRL + Qt.Key_R)
-        reload_action = QAction("Go Back", self)
-        reload_action.setShortcut(shortcut_reload)
+        reload_action = QAction("Reload", self)
+        reload_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_R))
         reload_action.triggered.connect(reload)
         new_tab_webview.addAction(reload_action)
 
-        shortcut2_reload = QKeySequence(Qt.Key_F5)
-        reload2_action = QAction("Go Back", self)
-        reload2_action.setShortcut(shortcut2_reload)
+        reload2_action = QAction("Reload", self)
+        reload2_action.setShortcut(QKeySequence(Qt.Key_F5))
         reload2_action.triggered.connect(reload)
         new_tab_webview.addAction(reload2_action)
+
+        gohome_action = QAction("Go Home", self)
+        gohome_action.setShortcut(QKeySequence(Qt.ALT + Qt.Key_Home))
+        gohome_action.triggered.connect(gohome)
+        new_tab_webview.addAction(gohome_action)
+        
         if url == "file:///usr/local/share/brapy/home.html" or url.startswith("file:///usr/local/share/brapy/homeupdate.html"):
             self.new_tab_address_bar.setFocus()
 

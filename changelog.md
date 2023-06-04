@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.03.2 : 04.06.2023 - Inline Variable and Shortcuts
+
+By: [@Niklas20114552](https://github.com/Niklas20114552)
+
+Changed:
+
+- Variables:
+    - Inline every shortcut_ Variable
+- Shortcuts:
+    - Corrected wrong Action-Labels
+
+Added:
+
+- Shortcuts:
+    - Alt + Home (aka. Pos1) : Go to Homepage
+
 ## 0.03.1 : 04.06.2023 - Fixed Upgrader
 
 By: [@Niklas20114552](https://github.com/Niklas20114552)

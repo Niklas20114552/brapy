@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.03.1 : 04.06.2023 - Fixed Upgrader
+
+By: [@Niklas20114552](https://github.com/Niklas20114552)
+
+Fixed:
+
+- Upgrader:
+    - Upgrader could not copy files.
+    - Upgrader failed to start brapy again.
+    - Improve syntax.
+
+Changed:
+
+- Setup:
+    - Separated Font installation.
+    - Added sudo to touch.
+
+- main.py:
+    - Copy upgrade.sh first to /tmp befor run it. (Bash does not like it when the running skript is changed.)
+
+Added:
+
+- Upgrade.html:
+    - Added button to see changelog.
+
 ## 0.03 : 03.06.2023 - Added Upgrader
 
 By: [@Niklas20114552](https://github.com/Niklas20114552)

@@ -1,15 +1,14 @@
 #!/usr/bin/bash
+rm -rf /tmp/brapy_upgrade
 git clone https://github.com/Niklas20114552/brapy /tmp/brapy_upgrade
+cd /tmp/brapy_upgrade
 if [[ -f /usr/local/share/brapy/dnf.type ]]; then
-    /tmp/brapy_upgrade/setup.sh --dnf --unattended
-    brapy & disown
+    ./setup.sh --dnf --unattended
 elif [[ -f /usr/local/share/brapy/apt.type ]]; then
-    /tmp/brapy_upgrade/setup.sh --apt --unattended
-    brapy & disown
+    ./setup.sh --apt --unattended
 elif [[ -f /usr/local/share/brapy/pip.type ]]; then
-    /tmp/brapy_upgrade/setup.sh --pip --unattended
-    brapy & disown
+    ./setup.sh --pip --unattended
 elif [[ -f /usr/local/share/brapy/pacman.type ]]; then
-    /tmp/brapy_upgrade/setup.sh --pacman --unattended
-    brapy & disown
+    ./setup.sh --pacman --unattended
 fi
+exit

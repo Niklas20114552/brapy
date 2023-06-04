@@ -6,8 +6,9 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEngi
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PyQt5.QtGui import QKeySequence, QFont, QFocusEvent
 from packaging import version
+from shutil import copyfile
 
-APP_VERSION: str = "0.03"
+APP_VERSION: str = "0.03.1"
 APP_NAME: str = "Brapy"
 APP_DESCR: str = APP_NAME + " ist ein auf Qt5 (PyQt5) in Python geschriebender Webbrowser."
 
@@ -161,7 +162,11 @@ class WebBrowser(QMainWindow):
         data.append({"url": "file:///usr/local/share/brapy/upgrade.html", "title": "Upgrade abgeschlossen"})
         with open(os.path.expanduser('~/.config/brapy/tabs.json'), 'w') as file:
             json.dump(data, file)
-        process = subprocess.Popen("pkexec /usr/local/share/brapy/upgrade", shell=True)
+        copyfile("/usr/local/share/brapy/upgrade", "/tmp/brapy_upgrade.sh")
+        subprocess.run("chmod +x /tmp/brapy_upgrade.sh", shell=True)
+        process = subprocess.Popen("pkexec /tmp/brapy_upgrade.sh", shell=True)
+        process.wait()
+        new_brapy = subprocess.Popen("brapy", shell=True)
         sys.exit()
 
     def load_tabs(self):
@@ -388,6 +393,8 @@ class WebBrowser(QMainWindow):
                 url_text = "Fehler beim Laden der Webseite"
             elif url_text.startswith("file:///usr/local/share/brapy/errorfile.html"):
                 url_text = "Fehler beim Laden der Datei"
+            elif url_text.startswith("file:///usr/local/share/brapy/upgrade.html"):
+                url_text = "Upgrade abgeschlossen"
             elif url_text == "file:///usr/local/share/brapy/home.html" or url_text.startswith("file:///usr/local/share/brapy/homeupdate.html"):
                 url_text = ""
             self.new_tab_address_bar.setText(url_text)

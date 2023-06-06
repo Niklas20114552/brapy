@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fehler :(</title>
+<style>
+div {
+    height: 200px;
+    width: 500px;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -130px;
+    margin-left: -200px;
+    text-align: center
+}
+</style>
+</head>
+<body>
+<div>
+<p id="title" style="font-size: 20pt"></p>
+<p id="url"></p>
+<p id="subtitle"></p>
+<p id="more"></p>
+</div>
+<script>
+var urlParam = function(name, w){
+    w = w || window;
+    var rx = new RegExp('[\&|\?]'+name+'=([^\&\#]+)'),
+        val = w.location.search.match(rx);
+    return !val ? '':val[1];
+}
+var url = urlParam('eurl');
+var code = urlParam('code');
+if (code = "b00") {
+    document.getElementById('url').innerHTML = '"' + url + '" konnte nicht geladen werden.';
+    document.getElementById('title').innerHTML = "Kein Internet";
+    document.getElementById('subtitle').innerHTML = 'Dieser Computer scheint keine aktive Internetverbindung zu haben.';
+    document.getElementById('more').innerHTML = 'Bitte überprüfen Sie, ob Brapy die Berechtigung hat, auf das Internet zuzugreifen (Sie sind möglicherweise verbunden, aber hinter einer Firewall). Falls dies der Fall ist, versuchen sie es bitte später erneut.';
+} else if (code = "b01") {
+    var username = urlParam('name')
+    document.getElementById('url').innerHTML = 'Das Laden von "' + url + '" wurde abgebrochen.';
+    document.getElementById('title').innerHTML = "Sicherheitsfehler";
+    document.getElementById('subtitle').innerHTML = 'In der URL wurde der Benutzername "' + username + '" angegeben. Dies könnte ein Versuch sein, sie zu täuschen, um Anmeldedaten zu stehlen.';
+    document.getElementById('more').innerHTML = 'Falls sie dennoch weiterfahren möchten, ändern sie bitte den Eintrag "[Security] : allow_usernames_in_url" in "~/.config/brapy/brapy.ini" und starten sie anschließend Brapy neu.';
+}
+</script>
+
+</body>
+</html>

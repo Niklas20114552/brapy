@@ -7,8 +7,11 @@ from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkRepl
 from PyQt5.QtGui import QKeySequence, QFont, QFocusEvent
 from packaging import version
 from shutil import copyfile
+from urllib.parse import urlparse
+from configparser import ConfigParser
+config = ConfigParser()
 
-APP_VERSION: str = "0.03.2"
+APP_VERSION: str = "0.04"
 APP_NAME: str = "Brapy"
 APP_DESCR: str = APP_NAME + " ist ein auf Qt5 (PyQt5) in Python geschriebender Webbrowser."
 
@@ -65,6 +68,18 @@ class WebBrowser(QMainWindow):
         super().__init__()
 
         self.downloads = []
+
+        config.read(os.path.expanduser('~/.config/brapy/brapy.ini'))
+        if not os.path.exists(os.path.expanduser('~/.config/brapy/brapy.ini')):
+            config.add_section('Security')
+            config.set('Security', 'allow_usernames_in_url', 'False')
+            with open(os.path.expanduser('~/.config/brapy/brapy.ini'), 'w') as f:
+                config.write(f)
+        if config.get('Security', 'allow_usernames_in_url') == "True":
+            self.config_allowusernamesinurl = True
+        else:
+            self.config_allowusernamesinurl = False
+
         text = requests.get("https://raw.githubusercontent.com/Niklas20114552/brapy/main/main.py").text
         pattern = r'APP_VERSION: str = "(.+?)"'
         match = re.search(pattern, text)
@@ -312,15 +327,32 @@ class WebBrowser(QMainWindow):
             progress_bar.setValue(progress)
 
     def add_new_tab(self, url, title):
+        def extract_username(url):
+            parsed_url = urlparse(url)
+            if parsed_url.username:
+                return parsed_url.username
+            elif parsed_url.netloc:
+                netloc_parts = parsed_url.netloc.split('@')
+                if len(netloc_parts) == 2:
+                    return netloc_parts[0]
+            return None
         def check_url_existence(url_string):
             try:
-                response = requests.get(url_string)
-                return url_string
-            except requests.exceptions.RequestException as e:
-                if e.response is not None:
-                    return f"file:///usr/local/share/brapy/error.html?eurl={url_string}&code={e.response.status_code}"
-                else:
-                    return f"file:///usr/local/share/brapy/error.html?eurl={url_string}&code=404"
+                requests.head("http://1.1.1.1/", timeout=1)
+                hostname = urlparse(url_string).hostname
+                if "@" in url_string and not self.config_allowusernamesinurl:
+                    username = extract_username(url_string)
+                    return f"file:///usr/local/share/brapy/extraerror.html?eurl={hostname}&code=b01&name={username}"
+                try:
+                    response = requests.get(url_string)
+                    return url_string
+                except requests.exceptions.RequestException as e:
+                    if e.response is not None:
+                        return f"file:///usr/local/share/brapy/error.html?eurl={url_string}&code={e.response.status_code}"
+                    else:
+                        return f"file:///usr/local/share/brapy/error.html?eurl={url_string}&code=404"
+            except requests.ConnectionError:
+                return f"file:///usr/local/share/brapy/extraerror.html?eurl={hostname}&code=b00"
 
         def check_file_existence(url_string):
             path = url_string.removeprefix("file://")
@@ -385,7 +417,7 @@ class WebBrowser(QMainWindow):
 
         def update_address_bar(url):
             url_text = url.toString()
-            if url_text.startswith("file:///usr/local/share/brapy/error.html"):
+            if url_text.startswith("file:///usr/local/share/brapy/error.html") or url_text.startswith("file:///usr/local/share/brapy/extraerror.html"):
                 url_text = "Fehler beim Laden der Webseite"
             elif url_text.startswith("file:///usr/local/share/brapy/errorfile.html"):
                 url_text = "Fehler beim Laden der Datei"
@@ -393,6 +425,16 @@ class WebBrowser(QMainWindow):
                 url_text = "Upgrade abgeschlossen"
             elif url_text == "file:///usr/local/share/brapy/home.html" or url_text.startswith("file:///usr/local/share/brapy/homeupdate.html"):
                 url_text = ""
+            elif url_text.startswith("file://"):
+                url_text = check_file_existence(url_text)
+                if url_text.startswith("file:///usr/local/share/brapy/errorfile.html"):
+                    new_tab_webview.load(QUrl(url_text))
+                    print(f"Thats odd! {url_text}")
+            elif url_text.startswith("https://") or url_text.startswith("http://"):
+                url_text = check_url_existence(url_text)
+                if url_text.startswith("file:///usr/local/share/brapy/error.html") or url_text.startswith("file:///usr/local/share/brapy/extraerror.html"):
+                    new_tab_webview.load(QUrl(url_text))
+                    print(f"Thats odd! {url_text}")
             self.new_tab_address_bar.setText(url_text)
             self.new_tab_address_bar.setCursorPosition(0)  # Cursor auf den Anfang des Texts setzen
 

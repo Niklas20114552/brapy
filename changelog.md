@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.04 : 06.06.2023 - Added basic configuration files and more security
+
+By: [@Niklas20114552](https://github.com/Niklas20114552)
+
+Added:
+
+- Configuration File: ~/.config/brapy/brapy.ini
+- Security features: (For this Error Messages was the file extraerror.html added)
+    - Do not allow to navigate to URLs that contains a username (Can be disabled in config)
+- Added Error Message for no Internet Connection
+
+Fixed:
+
+- Wrong Errormessage is being displayed, when a website is navigation to a url that does not exists.
+
 ## 0.03.2 : 04.06.2023 - Inline Variable and Shortcuts
 
 By: [@Niklas20114552](https://github.com/Niklas20114552)

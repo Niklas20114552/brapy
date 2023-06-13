@@ -1,6 +1,6 @@
 # Brapy
 
-Brapy ist ein auf Qt5 (PyQt5) in Python geschriebender Webbrowser.
+Brapy ist ein auf Qt5 (PyQt5) in Python geschriebener Webbrowser.
 
 Brapy ist noch lange nicht ausgereift. Also bitte ich hier (wie immer), dass Fehler im Issue-Tab von Github gemeldet werden.
 
@@ -16,11 +16,11 @@ Navigiere in das Verzeichnis:
 
 Nun musst du das Setup im Terminal ausführen:
 
-Für Archlinux (und alles was darauf basiert): ```./setup.sh --pacman```
+Für Arch Linux (und alles was darauf basiert): ```./setup.sh --pacman```
 
 Für Debian (und Ubuntu und alles was darauf basiert): ```./setup.sh --apt```
 
-Für RedHat (und alles was darauf basiert, wie Fedora): ```./setup.sh --dnf```
+Für Red Hat (und alles was darauf basiert, wie Fedora): ```./setup.sh --dnf```
 
 Für alles andere: ```./setup.sh --pip```
 
@@ -28,22 +28,22 @@ Für alles andere: ```./setup.sh --pip```
 
 ### Rechtsklickmenü
 
-Es wird noch das standard Rechtsklickmenü von PyQt5.QWebEngineView verwendet.
+Es wird noch das Standard Rechtsklickmenü von PyQt5.QWebEngineView verwendet.
 
-Daher funktionieren Knöpfe wie "Open link in new tab" oder "Save page" noch nicht, da diese Funktionen noch nicht implimentiert sind.
+Daher funktionieren Knöpfe wie "Open link in new tab" oder "Save page" noch nicht, da diese Funktionen noch nicht implementiert sind.
 
 ### Vollbild
 
-Man kann schon mit F11 in den Vollbildmodus wechseln, aber auf Webseiten die einen Eigenen Knopf dafür haben (wie z.B. Youtube) funktioniert dies noch nicht.
+Man kann schon mit F11 in den Vollbildmodus wechseln, aber auf Webseiten die einen Eigenen Knopf dafür haben (wie z.B. YouTube) funktioniert dies noch nicht.
 
 ### Drucken
 
-Einfach noch überhaupt nicht implimentiert. Kommt aber noch.
+Einfach noch überhaupt nicht implementiert. Kommt aber noch.
 
-### Webseiten mit Zertifikatfehler aufrufen
+### Webseiten mit Zertifikatsfehler aufrufen
 
 Dies ist ein Bug.
 
 ### Berechtigungen
 
-Einfach noch überhaupt nicht implimentiert. Kommt aber noch.
+Einfach noch überhaupt nicht implementiert. Kommt aber noch.

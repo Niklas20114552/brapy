@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Icon=/usr/local/share/brapy/brapy_logo.png
-Name=Brapy
+Name=Brapy Web Browser
 Exec=brapy
 Terminal=false
 Hidden=false

@@ -32,12 +32,12 @@ var urlParam = function(name, w){
 }
 var url = urlParam('eurl');
 var code = urlParam('code');
-if (code = "b00") {
+if (code == "b00") {
     document.getElementById('url').innerHTML = '"' + url + '" konnte nicht geladen werden.';
     document.getElementById('title').innerHTML = "Kein Internet";
     document.getElementById('subtitle').innerHTML = 'Dieser Computer scheint keine aktive Internetverbindung zu haben.';
     document.getElementById('more').innerHTML = 'Bitte überprüfen Sie, ob Brapy die Berechtigung hat, auf das Internet zuzugreifen (Sie sind möglicherweise verbunden, aber hinter einer Firewall). Falls dies der Fall ist, versuchen sie es bitte später erneut.';
-} else if (code = "b01") {
+} else if (code == "b01") {
     var username = urlParam('name')
     document.getElementById('url').innerHTML = 'Das Laden von "' + url + '" wurde abgebrochen.';
     document.getElementById('title').innerHTML = "Sicherheitsfehler";

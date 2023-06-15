@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.04.1 : 15.06.2023 - Added uninstaller and bug fixes
+
+By: [@Niklas20114552](https://github.com/Niklas20114552)
+
+Added:
+
+- Uninstaller:
+    - Github Repository: /uninstall.sh
+    - Installed: /usr/local/bin/brapy-uninstaller
+
+Fixed:
+
+- Browser throws a Security Error when loading URL that contains a ```@``` (like https://youtube.com/@user) 
+- Added missing equals-sign in extraerror.html. Fixes bug, that "no internet"-error is being displayed when url contains username.
+- Moved Sudo commands behind the confirm-prompt in setup.sh
+
+Changed:
+
+- Desktop Entry Name is now "Brapy Web Browser" instead of "Brapy"
+
 ## 0.04 : 06.06.2023 - Added basic configuration files and more security
 
 By: [@Niklas20114552](https://github.com/Niklas20114552)

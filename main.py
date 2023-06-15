@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 from configparser import ConfigParser
 config = ConfigParser()
 
-APP_VERSION: str = "0.04"
+APP_VERSION: str = "0.04.1"
 APP_NAME: str = "Brapy"
 APP_DESCR: str = APP_NAME + " ist ein auf Qt5 (PyQt5) in Python geschriebender Webbrowser."
 
@@ -340,8 +340,8 @@ class WebBrowser(QMainWindow):
             try:
                 requests.head("http://1.1.1.1/", timeout=1)
                 hostname = urlparse(url_string).hostname
-                if "@" in url_string and not self.config_allowusernamesinurl:
-                    username = extract_username(url_string)
+                username = extract_username(url_string)
+                if not username == None and not self.config_allowusernamesinurl:
                     return f"file:///usr/local/share/brapy/extraerror.html?eurl={hostname}&code=b01&name={username}"
                 try:
                     response = requests.get(url_string)

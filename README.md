@@ -47,3 +47,7 @@ Dies ist ein Bug.
 ### Berechtigungen
 
 Einfach noch überhaupt nicht implementiert. Kommt aber noch.
+
+## Lizenz
+
+Diese Software ist unter der MIT Lizenz lizensiert. Für weitere Informationen lesen sie bitte [die LIZENZ Datei](https://github.com/Niklas20114552/brapy/blob/main/LICENSE).

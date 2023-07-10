@@ -1,0 +1,40 @@
+# Maintainer: Niklas20114552 <niklas.deppermann@outlook.com>
+pkgname="brapy"
+pkgver=0.04.1
+pkgrel=1
+pkgdesc="${pkgname} ist ein auf Qt5 (PyQt5) basierender in Python geschriebender Webbrowser."
+arch=(any)
+license=('MIT')
+url="https://github.com/Niklas20114552/brapy"
+source=('https://github.com/Niklas20114552/brapy/archive/refs/tags/0.04.1.tar.gz')
+sha256sums=('SKIP')
+depends=('python3' 'python-requests' 'python-pyqt5' 'python-pyqt5-sip' 'python-pyqt5-webengine')
+makedepends=('wget')
+
+package() {
+	MYTMPDIR=$(mktemp -d -p ~)
+	sudo wget --output-document="$MYTMPDIR/MaterialIconsOutlined-Regular.otf" "https://github.com/google/material-design-icons/raw/master/font/MaterialIconsOutlined-Regular.otf"
+	sudo wget --output-document="$MYTMPDIR/MaterialIcons-Regular.ttf" "https://github.com/google/material-design-icons/raw/master/font/MaterialIcons-Regular.ttf"
+
+	cd "$pkgname-$pkgver"
+
+	install -Dm755 main.py         ${pkgdir}/usr/bin/${pkgname}
+
+	mkdir -p ${pkgdir}/usr/share/${pkgname}
+ 	install -Dm644 extraerror.html ${pkgdir}/usr/share/${pkgname}/
+	install -Dm644 error.html      ${pkgdir}/usr/share/${pkgname}/
+	install -Dm644 errorfile.html  ${pkgdir}/usr/share/${pkgname}/
+	install -Dm644 home.html       ${pkgdir}/usr/share/${pkgname}/
+	install -Dm644 homeupdate.html ${pkgdir}/usr/share/${pkgname}/
+	install -Dm644 upgrade.html    ${pkgdir}/usr/share/${pkgname}/
+
+	install -Dm644 brapy_logo.png ${pkgdir}/usr/share/${pkgname}/brapy_logo.png
+
+	mkdir -p ${pkgdir}/usr/share/fonts
+	install -Dm644 "$MYTMPDIR/MaterialIconsOutlined-Regular.otf" ${pkgdir}/usr/share/fonts/
+	install -Dm644 "$MYTMPDIR/MaterialIcons-Regular.ttf" ${pkgdir}/usr/share/fonts/
+
+	desktop-file-install --dir=${pkgdir}/usr/share/applications brapy.desktop
+
+	rm -rf "$MYTMPDIR"
+}

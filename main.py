@@ -2,7 +2,7 @@
 import sys, requests, os, json, getopt, re, subprocess
 from PyQt5.QtCore import Qt, QUrl, QDir, QStandardPaths, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QHBoxLayout, QVBoxLayout, QWidget, QMessageBox, QPushButton, QTabWidget, QTabBar, QMenu, QAction, QDialog, QLabel, QFileDialog, QProgressBar
-from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEnginePage
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEnginePage, QWebEngineSettings
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PyQt5.QtGui import QKeySequence, QFont, QFocusEvent
 from packaging import version
@@ -14,6 +14,7 @@ config = ConfigParser()
 APP_VERSION: str = "0.04.1"
 APP_NAME: str = "Brapy"
 APP_DESCR: str = APP_NAME + " ist ein auf Qt5 (PyQt5) in Python geschriebender Webbrowser."
+APP_MANUAL_INSTALLED: bool = True
 
 class LineEdit(QLineEdit):
     def __init__(self):
@@ -63,6 +64,79 @@ class DownloadDialog(QDialog):
         if not file_path == "":
             self.path_lineedit.setText(file_path)
 
+class ConfirmUpgrade(QDialog):
+    def __init__(self, installed, toversion=None):
+        super().__init__()
+        if installed:
+            self.setWindowTitle("Upgrade bestätigen")
+        else:
+            self.setWindowTitle("Upgrade abgebrochen")
+        layout = QVBoxLayout(self)
+        if installed:
+            self.text = QLabel(f"Möchten sie mit den Upgrade auf {APP_NAME.lower()} {toversion} fortfahren?")
+            self.button_yes = QPushButton("Ja")
+            self.button_no = QPushButton("Nein")
+            self.button_yes.clicked.connect(self.accept)
+            self.button_no.clicked.connect(self.reject)
+            layout.addWidget(self.text)
+            button_layout = QHBoxLayout()
+            button_layout.addWidget(self.button_no)
+            button_layout.addWidget(self.button_yes)
+            layout.addLayout(button_layout)
+        else:
+            self.text = QLabel(f"Das Upgrade kann nicht fortfahren, da {APP_NAME} durch eine Paketverwaltung installiert wurde.")
+            self.text2 = QLabel(f"Bitte verwenden sie die Paketverwaltung um {APP_NAME} zu aktualisieren oder kompilieren sie das Paket selber.")
+            self.button_ok = QPushButton("Ok")
+            self.button_ok.clicked.connect(self.reject)
+            layout.addWidget(self.text)
+            layout.addWidget(self.text2)
+            layout.addWidget(self.button_ok)
+
+class BrapyEngine(QWebEngineView):
+    def __init__(self, homeurl, *args, **kwargs):
+        super().__init__(*args, **kwargs) #
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.showContextMenu)
+        self.homeurl = homeurl
+        
+        settings = self.settings()
+        settings.setAttribute(QWebEngineSettings.JavascriptEnabled, True)
+        settings.setAttribute(QWebEngineSettings.JavascriptCanOpenWindows, True)
+        settings.setAttribute(QWebEngineSettings.PluginsEnabled, True)
+
+    def showContextMenu(self, pos):
+        menu = QMenu(self)
+
+        action_back = QAction("Zurück")
+        action_back.triggered.connect(self.back)
+        menu.addAction(action_back)
+
+        action_forward = QAction("Vor")
+        action_forward.triggered.connect(self.forward)
+        menu.addAction(action_forward)
+
+        action_reload = QAction("Neu Laden")
+        action_reload.triggered.connect(self.reload)
+        menu.addAction(action_reload)
+
+        action_home = QAction("Startseite")
+        action_home.triggered.connect(lambda: self.load(QUrl(self.homeurl)))
+        menu.addAction(action_home)
+
+        menu.addSeparator()
+        # action_print = QAction("Print", self)
+        # action_print.triggered.connect(self.printAction)
+        # menu.addAction(action_print)
+
+        # Weitere Aktionen können hier hinzugefügt werden
+
+        menu.exec_(self.mapToGlobal(pos))
+
+    def handleNewTabRequest(self, _type):
+        url = self.page().requestedUrl()
+        new_tab_url = url.toString()
+        print("Webseite möchte einen neuen Tab öffnen:", new_tab_url)
+        
 class WebBrowser(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -166,19 +240,25 @@ class WebBrowser(QMainWindow):
                 return False
         return False
     def upgrade(self):
-        self.save_tabs()
-        print("Save complete!")
-        with open(os.path.expanduser('~/.config/brapy/tabs.json'), 'r') as file:
-            data = json.load(file)
-        data.append({"url": "file:///usr/local/share/brapy/upgrade.html", "title": "Upgrade abgeschlossen"})
-        with open(os.path.expanduser('~/.config/brapy/tabs.json'), 'w') as file:
-            json.dump(data, file)
-        copyfile("/usr/local/share/brapy/upgrade", "/tmp/brapy_upgrade.sh")
-        subprocess.run("chmod +x /tmp/brapy_upgrade.sh", shell=True)
-        process = subprocess.Popen("pkexec /tmp/brapy_upgrade.sh", shell=True)
-        process.wait()
-        new_brapy = subprocess.Popen("brapy", shell=True)
-        sys.exit()
+        if APP_MANUAL_INSTALLED:
+            dialog = ConfirmUpgrade(True, self.lastversion)
+            if dialog.exec_() == QDialog.Accepted:
+                self.save_tabs()
+                print("Save complete!")
+                with open(os.path.expanduser('~/.config/brapy/tabs.json'), 'r') as file:
+                    data = json.load(file)
+                data.append({"url": "file:///usr/local/share/brapy/upgrade.html", "title": "Upgrade abgeschlossen"})
+                with open(os.path.expanduser('~/.config/brapy/tabs.json'), 'w') as file:
+                    json.dump(data, file)
+                copyfile("/usr/local/share/brapy/upgrade", "/tmp/brapy_upgrade.sh")
+                subprocess.run("chmod +x /tmp/brapy_upgrade.sh", shell=True)
+                process = subprocess.Popen("pkexec /tmp/brapy_upgrade.sh", shell=True)
+                process.wait()
+                new_brapy = subprocess.Popen("brapy", shell=True)
+                sys.exit()
+        else:
+            dialog = ConfirmUpgrade(False)
+            dialog.exec_()
 
     def load_tabs(self):
         tabs_file_path = os.path.expanduser("~/.config/brapy/tabs.json")
@@ -363,14 +443,7 @@ class WebBrowser(QMainWindow):
 
         def load_url():
             url = self.new_tab_address_bar.text()
-            if not url.startswith("file://"):
-                if url.startswith("www."):
-                    url = f"https://{url}"
-                elif not (url.startswith("https://") or url.startswith("http://")):
-                    url = f"https://{url}"
-                qeurl = check_url_existence(url)
-                new_tab_webview.load(QUrl(qeurl))
-            else:
+            if url.startswith("file://"):
                 if '?' in url:
                     url = url.rsplit('?', 1)
                     qeurl = check_file_existence(url[0])
@@ -378,17 +451,20 @@ class WebBrowser(QMainWindow):
                         qeurl = qeurl + "?" + url[1]
                 else:
                     qeurl = check_file_existence(url)
+                new_tab_webview.load(QUrl(qeurl))
+            elif url.startswith("view-source:"):
+                new_tab_webview.load(QUrl(url))
+            else:
+                if url.startswith("www."):
+                    url = f"https://{url}"
+                elif not (url.startswith("https://") or url.startswith("http://")):
+                    url = f"https://{url}"
+                qeurl = check_url_existence(url)
                 new_tab_webview.load(QUrl(qeurl))
 
+
         def load_curl(url):
-            if not url.startswith("file://"):
-                qeurl = check_url_existence(url)
-                if url.startswith("www."):
-                    url = f"https://{url}"
-                elif not (url.startswith("https://") or url.startswith("http://")):
-                    url = f"https://{url}"
-                new_tab_webview.load(QUrl(qeurl))
-            else:
+            if url.startswith("file://"):
                 if '?' in url:
                     url = url.rsplit('?', 1)
                     qeurl = check_file_existence(url[0])
@@ -396,6 +472,15 @@ class WebBrowser(QMainWindow):
                         qeurl = qeurl + "?" + url[1]
                 else:
                     qeurl = check_file_existence(url)
+                new_tab_webview.load(QUrl(qeurl))
+            elif url.startswith("view-source:"):
+                new_tab_webview.load(QUrl(url))
+            else:
+                if url.startswith("www."):
+                    url = f"https://{url}"
+                elif not (url.startswith("https://") or url.startswith("http://")):
+                    url = f"https://{url}"
+                qeurl = check_url_existence(url)
                 new_tab_webview.load(QUrl(qeurl))
 
         def gohome():
@@ -408,6 +493,8 @@ class WebBrowser(QMainWindow):
 
         def update_tab_title():
             title = new_tab_webview.page().title()
+            if title.startswith("view-source:"):
+                title = f"Seitenquelltext von {title.split(':', 1)[1].split('?', 1)[0]}"
             index = self.tab_widget.currentIndex()
             if new_tab_webview.page().isAudioMuted():
                 self.tab_widget.setTabText(index, " " + title)
@@ -435,6 +522,8 @@ class WebBrowser(QMainWindow):
                 if url_text.startswith("file:///usr/local/share/brapy/error.html") or url_text.startswith("file:///usr/local/share/brapy/extraerror.html"):
                     new_tab_webview.load(QUrl(url_text))
                     print(f"Thats odd! {url_text}")
+            elif url_text.startswith("view-source:"):
+                url_text = f"Seitenquelltext von {url_text.split(':', 1)[1].split('?', 1)[0]}"
             self.new_tab_address_bar.setText(url_text)
             self.new_tab_address_bar.setCursorPosition(0)  # Cursor auf den Anfang des Texts setzen
 
@@ -516,7 +605,7 @@ class WebBrowser(QMainWindow):
         new_tab_layout.addLayout(new_tab_address_layout)
 
         # Webview zur neuen Registerkarte hinzufügen
-        new_tab_webview = QWebEngineView()
+        new_tab_webview = BrapyEngine(self.homeurl)
         new_tab_layout.addWidget(new_tab_webview)
 
         # Signal zum Aktualisieren der Adressleiste in der neuen Registerkarte verbinden
@@ -608,7 +697,7 @@ def read_commandline_args(argv):
         else:
 
             if opt in ("-v", "--version"):
-                print("brapy " + APP_VERSION)
+                print(APP_NAME.lower() + " " + APP_VERSION)
                 sys.exit()
             # if opt in ("-t", "--trace"):
             #     global TRACE

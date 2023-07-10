@@ -11,6 +11,6 @@ if [[ $(pidof brapy | wc -w) != 0 ]]; then
 fi
 sudo rm -rfv /usr/local/share/brapy
 sudo rm -f /usr/local/bin/brapy
-sudo rm -f /usr/local/bin/brapy-uninstaller
 sudo rm -f /usr/share/applications/brapy.desktop
 echo "Fertig. Aber es ist doch Schade..."
+sudo rm -f /usr/local/bin/brapy-uninstaller

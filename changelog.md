@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.05-beta1 : 10.07.2023 - Added Archlinux PKGBUILD 
+
+By: [@Niklas20114552](https://github.com/Niklas20114552)
+
+Added:
+
+- PKGBUILD for Archlinux
+- Confirm Dialog for Updater when manually installed
+- Error Dialog for Updater when installed via package manager
+- Custom Contextmenu
+
+Fixed:
+
+- Move ```sudo rm -f /usr/local/bin/brapy-uninstaller``` to the end of uninstall.sh. Fixed that the Uninstaller closes mid in uninstallation.
+
 ## 0.04.1 : 15.06.2023 - Added uninstaller and bug fixes
 
 By: [@Niklas20114552](https://github.com/Niklas20114552)

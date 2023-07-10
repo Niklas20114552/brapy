@@ -1,6 +1,6 @@
 # Brapy
 
-Brapy ist ein auf Qt5 (PyQt5) in Python geschriebener Webbrowser.
+Brapy ist ein auf Qt5 (PyQt5) basierender in Python geschriebener Webbrowser.
 
 Brapy ist noch lange nicht ausgereift. Also bitte ich hier (wie immer), dass Fehler im Issue-Tab von Github gemeldet werden.
 
@@ -16,7 +16,9 @@ Navigiere in das Verzeichnis:
 
 Nun musst du das Setup im Terminal ausführen:
 
-Für Arch Linux (und alles was darauf basiert): ```./setup.sh --pacman```
+**Alte Variante:** Für Arch Linux (und alles was darauf basiert): ```./setup.sh --pacman```
+
+**Neue Variante:** Für Arch Linux (und alles was darauf basiert): ```cd makepkg/archlinux```, dann ```./createpackage.sh```
 
 Für Debian (und Ubuntu und alles was darauf basiert): ```./setup.sh --apt```
 
